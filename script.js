@@ -60,11 +60,20 @@ const words = {
 // This function will take an object and return all of its properties
 let allKeys = Object.keys(words);
 // console.log(allKeys);
+// Random Number depends on Keys Length
 let randomPropNumber = Math.floor(Math.random() * allKeys.length);
+// Category
 let randomPropName = allKeys[randomPropNumber];
 // console.log(words[randomPropName]);
+// Category Words
 let randomPropValue = words[randomPropName];
 // console.log(randomPropValue);
+// Random number depends on words
 let randomValueNumber = Math.floor(Math.random() * randomPropValue.length);
+// Word
 let randomValue = randomPropValue[randomValueNumber];
 // console.log(randomValue);
+
+// Set Category Info
+document.querySelector('.game-info .category span').textContent =
+  randomPropName;
