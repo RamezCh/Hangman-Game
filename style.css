@@ -37,3 +37,49 @@ hr {
   color: #e91e63;
   font-weight: bold;
 }
+
+.hangman-draw {
+  flex: 1;
+  background-color: #f8f8f8;
+  padding: 20px;
+  height: 324px;
+}
+
+.hangman-draw .the-draw {
+  width: 60px;
+  height: 280px;
+  border-bottom: 4px solid #222;
+  position: relative;
+  margin: auto;
+}
+
+.hangman-draw .the-stand:before {
+  content: '';
+  width: 4px;
+  height: 100%;
+  background-color: #222;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hangman-draw .the-hang:before {
+  content: '';
+  width: 100px;
+  height: 4px;
+  background-color: #222;
+  position: absolute;
+  top: 15px;
+  left: 30px;
+}
+
+.hangman-draw .the-hang:after {
+  content: '';
+  width: 4px;
+  height: 30px;
+  background-color: #222;
+  position: absolute;
+  top: 15px;
+  left: 130px;
+}
