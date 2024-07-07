@@ -276,3 +276,16 @@ hr {
   opacity: 0.2;
   pointer-events: none;
 }
+
+.popup {
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  background-color: #009688;
+  padding: 10px 20px;
+  width: 80%;
+  text-align: center;
+  font-size: 40px;
+  border: 1px solid #ccc;
+  color: #fff;
+}
