@@ -213,3 +213,9 @@ hr {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.letters .letter-box.clicked {
+  background-color: #222;
+  opacity: 0.2;
+  pointer-events: none;
+}

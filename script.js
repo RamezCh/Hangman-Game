@@ -96,3 +96,22 @@ lettersAndSpace.forEach(letter => {
   // Append Span To The Letters Guess Container
   lettersGuessContainer.appendChild(emptySpan);
 });
+
+// Handle Click On Letters
+document.addEventListener('click', e => {
+  if (e.target.className === 'letter-box') {
+    e.target.classList.add('clicked');
+    // Get Clicked Letter
+    let clickedLetter = e.target.textContent.toLowerCase();
+    // console.log(clickedLetter);
+    lettersAndSpace.forEach((wordLetter, wordIndex) => {
+      if (clickedLetter === wordLetter) {
+        // console.log(wordLetter, wordIndex);
+        // Set Letter To The Span
+        document.querySelectorAll('.letters-guess span')[
+          wordIndex
+        ].textContent = clickedLetter;
+      }
+    });
+  }
+});
