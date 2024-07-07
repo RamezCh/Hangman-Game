@@ -77,3 +77,22 @@ let randomValue = randomPropValue[randomValueNumber];
 // Set Category Info
 document.querySelector('.game-info .category span').textContent =
   randomPropName;
+
+// Select Letters Guess Element
+let lettersGuessContainer = document.querySelector('.letters-guess');
+
+// Convert Chosen Word To Array
+let lettersAndSpace = Array.from(randomValue);
+
+// Create Spans Depeneds On Word Length
+lettersAndSpace.forEach(letter => {
+  // Create Empty Span
+  let emptySpan = document.createElement('span');
+  // If Letter Is Space
+  if (letter === ' ') {
+    // Add Class To The Span
+    emptySpan.className = 'has-space';
+  }
+  // Append Span To The Letters Guess Container
+  lettersGuessContainer.appendChild(emptySpan);
+});
