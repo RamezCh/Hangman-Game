@@ -97,8 +97,19 @@ lettersAndSpace.forEach(letter => {
   lettersGuessContainer.appendChild(emptySpan);
 });
 
+// Letters Guess Spans
+const guessSpans = document.querySelectorAll('.letters-guess span');
+
+// Set Wrong Attempts
+let wrongAttempts = 0;
+
+// Select The Draw Element
+let draw = document.querySelector('.hangman-draw');
+
 // Handle Click On Letters
 document.addEventListener('click', e => {
+  // Set Status
+  let isFound = false;
   if (e.target.className === 'letter-box') {
     e.target.classList.add('clicked');
     // Get Clicked Letter
@@ -108,10 +119,17 @@ document.addEventListener('click', e => {
       if (clickedLetter === wordLetter) {
         // console.log(wordLetter, wordIndex);
         // Set Letter To The Span
-        document.querySelectorAll('.letters-guess span')[
-          wordIndex
-        ].textContent = clickedLetter;
+        guessSpans[wordIndex].textContent = clickedLetter;
+        isFound = true;
+        return;
       }
     });
+    // If Letter Is Wrong
+    if (!isFound) {
+      // Increase The Wrong Attempts
+      wrongAttempts++;
+      // Add Class Wrong On The Draw
+      draw.classList.add(`wrong-${wrongAttempts}`);
+    }
   }
 });

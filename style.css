@@ -51,6 +51,12 @@ hr {
   border-bottom: 4px solid #222;
   position: relative;
   margin: auto;
+  left: -60px;
+  display: none;
+}
+
+.hangman-draw .the-stand {
+  display: none;
 }
 
 .hangman-draw .the-stand:before {
@@ -62,6 +68,10 @@ hr {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.hangman-draw .the-hang {
+  display: none;
 }
 
 .hangman-draw .the-hang:before {
@@ -92,6 +102,7 @@ hr {
   left: 98px;
   top: 45px;
   border: 4px dashed #222;
+  display: none;
 }
 
 .hangman-draw .the-man .head {
@@ -102,6 +113,7 @@ hr {
   position: absolute;
   left: 108px;
   top: 54px;
+  display: none;
 }
 
 .hangman-draw .the-man .body {
@@ -111,6 +123,11 @@ hr {
   height: 110px;
   top: 104px;
   left: 130px;
+  display: none;
+}
+
+.hangman-draw .the-man .hands {
+  display: none;
 }
 
 .hangman-draw .the-man .hands:before,
@@ -131,6 +148,10 @@ hr {
 .hangman-draw .the-man .hands:after {
   left: 85px;
   transform: rotate(30deg);
+}
+
+.hangman-draw .the-man .legs {
+  display: none;
 }
 
 .hangman-draw .the-man .legs:before,
