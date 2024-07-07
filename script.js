@@ -130,6 +130,27 @@ document.addEventListener('click', e => {
       wrongAttempts++;
       // Add Class Wrong On The Draw
       draw.classList.add(`wrong-${wrongAttempts}`);
+
+      if (wrongAttempts === 8) {
+        endGame();
+        lettersContainer.classList.add('finished');
+      }
     }
   }
 });
+
+// End Game Function
+const endGame = function () {
+  // Create Popup Div
+  let div = document.createElement('div');
+  // Create Text
+  let divText = document.createTextNode(
+    `Game Over, The Word Is ${randomValue}`
+  );
+  // Append The Text To The Div
+  div.appendChild(divText);
+  // Add Class On The Div
+  div.className = 'popup';
+  // Append The Div To The Body
+  document.body.appendChild(div);
+};

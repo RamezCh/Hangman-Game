@@ -212,6 +212,10 @@ hr {
   text-align: center;
 }
 
+.letters.finished {
+  pointer-events: none;
+}
+
 .letters .letter-box {
   width: 55px;
   height: 55px;
