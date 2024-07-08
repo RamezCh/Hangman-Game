@@ -12,6 +12,9 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const popupMessage = document.querySelector('.popup-message');
 const playAgainButton = document.querySelector('.play-again');
+const highscoreSpan = document.querySelector('.highscore');
+const attemptsLeftSpan = document.querySelector('.attempts-left');
+const statsElement = document.querySelector('.stats');
 const words = {
   programming: ['python', 'javascript', 'php', 'html', 'css'],
   animals: ['dog', 'cat', 'elephant', 'tiger', 'lion'],
@@ -27,58 +30,64 @@ let wordArray;
 let guessSpans;
 let highScore = maxWrongAttempts;
 
-// Functions
+// Initialize the game
 function initializeGame() {
   randomCategory = getRandomCategory();
   randomWord = getRandomWord(randomCategory);
   wordArray = Array.from(randomWord);
 
-  categorySpan.innerHTML = randomCategory;
+  categorySpan.textContent = randomCategory;
   renderLetters();
   renderWordSpaces();
   guessSpans = document.querySelectorAll('.letters-guess span');
+  updateStats();
 }
 
+// Get a random category from the words object
 function getRandomCategory() {
   const categories = Object.keys(words);
   return categories[Math.floor(Math.random() * categories.length)];
 }
 
+// Get a random word from a given category
 function getRandomWord(category) {
   const wordList = words[category];
   return wordList[Math.floor(Math.random() * wordList.length)];
 }
 
+// Render letter buttons
 function renderLetters() {
   lettersContainer.innerHTML = '';
   lettersArray.forEach(letter => {
     const span = document.createElement('span');
     span.className = 'letter-box';
-    span.innerHTML = letter;
+    span.textContent = letter;
     lettersContainer.appendChild(span);
   });
 }
 
+// Render spaces for the letters in the word to be guessed
 function renderWordSpaces() {
   lettersGuessContainer.innerHTML = '';
   wordArray.forEach(letter => {
     const span = document.createElement('span');
     if (letter === ' ') {
-      span.className = 'has-space';
+      span.classList.add('has-space');
     }
     lettersGuessContainer.appendChild(span);
   });
 }
 
+// Handle letter click events
 function handleLetterClick(target) {
   target.classList.add('clicked');
-  const clickedLetter = target.innerHTML.toLowerCase();
+  const clickedLetter = target.textContent.toLowerCase();
   let guessedCorrectly = false;
 
   wordArray.forEach((wordLetter, wordIndex) => {
     if (clickedLetter === wordLetter) {
       guessedCorrectly = true;
-      guessSpans[wordIndex].innerHTML = clickedLetter;
+      guessSpans[wordIndex].textContent = clickedLetter;
       correctGuesses++;
     }
   });
@@ -92,8 +101,11 @@ function handleLetterClick(target) {
   } else if (correctGuesses === wordArray.length) {
     endGame(true);
   }
+
+  updateStats();
 }
 
+// End the game with a win or loss message
 function endGame(won) {
   const attemptsLeft = maxWrongAttempts - wrongAttempts;
   if (won && attemptsLeft > highScore) {
@@ -103,12 +115,14 @@ function endGame(won) {
   modal.classList.add('show');
   overlay.classList.add('show');
   popupMessage.innerHTML = won
-    ? `Congratulations, You Won! Attempts left: ${attemptsLeft}, High Score: ${highScore}`
+    ? `Congratulations, You Won!`
     : `Game Over! The word was ${randomWord}`;
   popupMessage.style.color = won ? '#009688' : '#e74c3c';
+  statsElement.style.display = won ? 'flex' : 'none';
   lettersContainer.classList.add('finished');
 }
 
+// Reset the game to start again
 function resetGame() {
   modal.classList.remove('show');
   overlay.classList.remove('show');
@@ -117,6 +131,12 @@ function resetGame() {
   correctGuesses = 0;
   lettersContainer.classList.remove('finished');
   initializeGame();
+}
+
+// Update the statistics displayed in the modal
+function updateStats() {
+  attemptsLeftSpan.textContent = maxWrongAttempts - wrongAttempts;
+  highscoreSpan.textContent = highScore;
 }
 
 // Event Listeners
@@ -128,5 +148,5 @@ document.addEventListener('click', e => {
   }
 });
 
-// Start Game
+// Start the game
 initializeGame();
