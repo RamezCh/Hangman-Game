@@ -1,31 +1,30 @@
-'use script';
+'use strict';
 
 // Letters
 const letters = 'abcdefghijklmnopqrstuvwxyz';
+const maxWrongAttempts = 8;
 
 // Get Array From Letters
-// This will convert the string to an array of letters
-let lettersArray = Array.from(letters);
-// console.log(lettersArray);
+const lettersArray = Array.from(letters);
 
-// Select Letters Container
-let lettersContainer = document.querySelector('.letters');
+// Select Elements
+const lettersContainer = document.querySelector('.letters');
+const categorySpan = document.querySelector('.game-info .category span');
+const lettersGuessContainer = document.querySelector('.letters-guess');
+const draw = document.querySelector('.hangman-draw');
+const popup = document.querySelector('.popup');
 
 // Generate Letters
-lettersArray.forEach(letter => {
-  // Create Span
-  let span = document.createElement('span');
-  // Create Text Node
-  let spanText = document.createTextNode(letter);
-  // Append The Text To Span
-  span.appendChild(spanText);
-  // Add Class To Span
-  span.className = 'letter-box';
-  // Append Span To The Letters Container
-  lettersContainer.appendChild(span);
-});
+const generateLetters = () => {
+  lettersArray.forEach(letter => {
+    const span = document.createElement('span');
+    span.textContent = letter;
+    span.className = 'letter-box';
+    lettersContainer.appendChild(span);
+  });
+};
 
-// Object Of Words + Categories
+// Game Words and Categories
 const words = {
   programming: [
     'php',
@@ -56,101 +55,78 @@ const words = {
   countries: ['egypt', 'syria', 'yemen', 'australia', 'canada', 'china'],
 };
 
-// Get Random Property
-// This function will take an object and return all of its properties
-let allKeys = Object.keys(words);
-// console.log(allKeys);
-// Random Number depends on Keys Length
-let randomPropNumber = Math.floor(Math.random() * allKeys.length);
-// Category
-let randomPropName = allKeys[randomPropNumber];
-// console.log(words[randomPropName]);
-// Category Words
-let randomPropValue = words[randomPropName];
-// console.log(randomPropValue);
-// Random number depends on words
-let randomValueNumber = Math.floor(Math.random() * randomPropValue.length);
-// Word
-let randomValue = randomPropValue[randomValueNumber];
-// console.log(randomValue);
+// Get Random Word
+const getRandomWord = () => {
+  const categories = Object.keys(words);
+  const category = categories[Math.floor(Math.random() * categories.length)];
+  const word =
+    words[category][Math.floor(Math.random() * words[category].length)];
+  return { category, word };
+};
 
-// Set Category Info
-document.querySelector('.game-info .category span').textContent =
-  randomPropName;
+// Initialize Game
+const initGame = () => {
+  const { category, word } = getRandomWord();
+  categorySpan.textContent = category;
 
-// Select Letters Guess Element
-let lettersGuessContainer = document.querySelector('.letters-guess');
+  const lettersAndSpace = Array.from(word);
 
-// Convert Chosen Word To Array
-let lettersAndSpace = Array.from(randomValue);
+  lettersAndSpace.forEach(letter => {
+    const span = document.createElement('span');
+    if (letter === ' ') span.className = 'has-space';
+    lettersGuessContainer.appendChild(span);
+  });
 
-// Create Spans Depeneds On Word Length
-lettersAndSpace.forEach(letter => {
-  // Create Empty Span
-  let emptySpan = document.createElement('span');
-  // If Letter Is Space
-  if (letter === ' ') {
-    // Add Class To The Span
-    emptySpan.className = 'has-space';
+  return word;
+};
+
+// Handle Letter Click
+const handleLetterClick = (letter, word, guessSpans) => {
+  let isFound = false;
+  let correctGuessCount = 0;
+
+  // Check if letter exists in the word
+  Array.from(word).forEach((wordLetter, index) => {
+    if (letter === wordLetter) {
+      guessSpans[index].textContent = letter;
+      isFound = true;
+      correctGuessCount++;
+    }
+  });
+
+  // Check if guessed letter is correct or not
+  if (!isFound) {
+    wrongAttempts++;
+    draw.classList.add(`wrong-${wrongAttempts}`);
+    if (wrongAttempts === maxWrongAttempts) endGame(word, false);
+  } else {
+    correctGuesses += correctGuessCount;
+    if (correctGuesses === word.replace(/ /g, '').length) endGame(word, true);
   }
-  // Append Span To The Letters Guess Container
-  lettersGuessContainer.appendChild(emptySpan);
-});
+};
 
-// Letters Guess Spans
+// End Game
+const endGame = (word, won) => {
+  popup.textContent = won
+    ? `Congratulations! You guessed the word: ${word}`
+    : `Game Over! The word was: ${word}`;
+  popup.style.display = 'block';
+  lettersContainer.classList.add('finished');
+};
+
+// Main
+let wrongAttempts = 0;
+let correctGuesses = 0;
+const word = initGame();
 const guessSpans = document.querySelectorAll('.letters-guess span');
 
-// Set Wrong Attempts
-let wrongAttempts = 0;
-
-// Select The Draw Element
-let draw = document.querySelector('.hangman-draw');
-
-// Handle Click On Letters
 document.addEventListener('click', e => {
-  // Set Status
-  let isFound = false;
   if (e.target.className === 'letter-box') {
+    const letter = e.target.textContent.toLowerCase();
     e.target.classList.add('clicked');
-    // Get Clicked Letter
-    let clickedLetter = e.target.textContent.toLowerCase();
-    // console.log(clickedLetter);
-    lettersAndSpace.forEach((wordLetter, wordIndex) => {
-      if (clickedLetter === wordLetter) {
-        // console.log(wordLetter, wordIndex);
-        // Set Letter To The Span
-        guessSpans[wordIndex].textContent = clickedLetter;
-        isFound = true;
-        return;
-      }
-    });
-    // If Letter Is Wrong
-    if (!isFound) {
-      // Increase The Wrong Attempts
-      wrongAttempts++;
-      // Add Class Wrong On The Draw
-      draw.classList.add(`wrong-${wrongAttempts}`);
-
-      if (wrongAttempts === 8) {
-        endGame();
-        lettersContainer.classList.add('finished');
-      }
-    }
+    handleLetterClick(letter, word, guessSpans);
   }
 });
 
-// End Game Function
-const endGame = function () {
-  // Create Popup Div
-  let div = document.createElement('div');
-  // Create Text
-  let divText = document.createTextNode(
-    `Game Over, The Word Is ${randomValue}`
-  );
-  // Append The Text To The Div
-  div.appendChild(divText);
-  // Add Class On The Div
-  div.className = 'popup';
-  // Append The Div To The Body
-  document.body.appendChild(div);
-};
+// Start the game
+generateLetters();
