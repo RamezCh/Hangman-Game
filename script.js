@@ -25,6 +25,7 @@ let randomCategory;
 let randomWord;
 let wordArray;
 let guessSpans;
+let highScore = maxWrongAttempts;
 
 // Functions
 function initializeGame() {
@@ -94,10 +95,15 @@ function handleLetterClick(target) {
 }
 
 function endGame(won) {
+  const attemptsLeft = maxWrongAttempts - wrongAttempts;
+  if (won && attemptsLeft > highScore) {
+    highScore = attemptsLeft;
+  }
+
   modal.classList.add('show');
   overlay.classList.add('show');
   popupMessage.innerHTML = won
-    ? 'Congratulations, You Won!'
+    ? `Congratulations, You Won! Attempts left: ${attemptsLeft}, High Score: ${highScore}`
     : `Game Over! The word was ${randomWord}`;
   popupMessage.style.color = won ? '#009688' : '#e74c3c';
   lettersContainer.classList.add('finished');
