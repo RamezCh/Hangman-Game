@@ -1,10 +1,9 @@
 'use strict';
 
-// Letters and Game Variables
+// Constants
 const letters = 'abcdefghijklmnopqrstuvwxyz';
 const maxWrongAttempts = 8;
 const lettersArray = Array.from(letters);
-
 const lettersContainer = document.querySelector('.letters');
 const categorySpan = document.querySelector('.game-info .category span');
 const lettersGuessContainer = document.querySelector('.letters-guess');
@@ -13,21 +12,21 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const popupMessage = document.querySelector('.popup-message');
 const playAgainButton = document.querySelector('.play-again');
-
-let wrongAttempts = 0;
-let correctGuesses = 0;
-
 const words = {
   programming: ['python', 'javascript', 'php', 'html', 'css'],
   animals: ['dog', 'cat', 'elephant', 'tiger', 'lion'],
   countries: ['lebanon', 'france', 'germany', 'brazil', 'canada'],
 };
 
+// Variables
+let wrongAttempts = 0;
+let correctGuesses = 0;
 let randomCategory;
 let randomWord;
 let wordArray;
 let guessSpans;
 
+// Functions
 function initializeGame() {
   randomCategory = getRandomCategory();
   randomWord = getRandomWord(randomCategory);
@@ -70,12 +69,6 @@ function renderWordSpaces() {
   });
 }
 
-document.addEventListener('click', e => {
-  if (e.target.className === 'letter-box') {
-    handleLetterClick(e.target);
-  }
-});
-
 function handleLetterClick(target) {
   target.classList.add('clicked');
   const clickedLetter = target.innerHTML.toLowerCase();
@@ -100,8 +93,6 @@ function handleLetterClick(target) {
   }
 }
 
-playAgainButton.addEventListener('click', resetGame);
-
 function endGame(won) {
   modal.classList.add('show');
   overlay.classList.add('show');
@@ -122,4 +113,14 @@ function resetGame() {
   initializeGame();
 }
 
+// Event Listeners
+playAgainButton.addEventListener('click', resetGame);
+
+document.addEventListener('click', e => {
+  if (e.target.className === 'letter-box') {
+    handleLetterClick(e.target);
+  }
+});
+
+// Start Game
 initializeGame();
