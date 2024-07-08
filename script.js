@@ -13,6 +13,8 @@ const categorySpan = document.querySelector('.game-info .category span');
 const lettersGuessContainer = document.querySelector('.letters-guess');
 const draw = document.querySelector('.hangman-draw');
 const popup = document.querySelector('.popup');
+const popupMessage = document.querySelector('.popup-message');
+const playAgainButton = document.querySelector('.play-again');
 
 // Generate Letters
 const generateLetters = () => {
@@ -107,18 +109,33 @@ const handleLetterClick = (letter, word, guessSpans) => {
 
 // End Game
 const endGame = (word, won) => {
-  popup.textContent = won
+  popupMessage.textContent = won
     ? `Congratulations! You guessed the word: ${word}`
     : `Game Over! The word was: ${word}`;
+  popup.style.backgroundColor = won ? '#009688' : '#e74c3c';
   popup.style.display = 'block';
   lettersContainer.classList.add('finished');
+};
+
+// Restart Game
+const restartGame = () => {
+  wrongAttempts = 0;
+  correctGuesses = 0;
+  lettersContainer.innerHTML = '';
+  lettersGuessContainer.innerHTML = '';
+  draw.className = 'hangman-draw';
+  popup.style.display = 'none';
+  lettersContainer.classList.remove('finished');
+  generateLetters();
+  word = initGame();
+  guessSpans = document.querySelectorAll('.letters-guess span');
 };
 
 // Main
 let wrongAttempts = 0;
 let correctGuesses = 0;
-const word = initGame();
-const guessSpans = document.querySelectorAll('.letters-guess span');
+let word = initGame();
+let guessSpans = document.querySelectorAll('.letters-guess span');
 
 document.addEventListener('click', e => {
   if (e.target.className === 'letter-box') {
@@ -126,7 +143,12 @@ document.addEventListener('click', e => {
     e.target.classList.add('clicked');
     handleLetterClick(letter, word, guessSpans);
   }
+  if (e.target === popup) {
+    popup.style.display = 'none';
+  }
 });
+
+playAgainButton.addEventListener('click', restartGame);
 
 // Start the game
 generateLetters();
