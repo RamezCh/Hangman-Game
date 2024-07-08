@@ -4,19 +4,19 @@
 const letters = 'abcdefghijklmnopqrstuvwxyz';
 const maxWrongAttempts = 8;
 const lettersArray = Array.from(letters);
-const elements = {
-  lettersContainer: document.querySelector('.letters'),
-  categorySpan: document.querySelector('.game-info .category span'),
-  lettersGuessContainer: document.querySelector('.letters-guess'),
-  hangmanDraw: document.querySelector('.hangman-draw'),
-  modal: document.querySelector('.modal'),
-  overlay: document.querySelector('.overlay'),
-  popupMessage: document.querySelector('.popup-message'),
-  playAgainButton: document.querySelector('.play-again'),
-  highscoreSpan: document.querySelector('.highscore'),
-  attemptsLeftSpan: document.querySelector('.attempts-left'),
-  statsElement: document.querySelector('.stats'),
-};
+// DOM Elements
+const lettersContainer = document.querySelector('.letters');
+const categorySpan = document.querySelector('.game-info .category span');
+const lettersGuessContainer = document.querySelector('.letters-guess');
+const hangmanDraw = document.querySelector('.hangman-draw');
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const popupMessage = document.querySelector('.popup-message');
+const playAgainButton = document.querySelector('.play-again');
+const highscoreSpan = document.querySelector('.highscore');
+const attemptsLeftSpan = document.querySelector('.attempts-left');
+const statsElement = document.querySelector('.stats');
+// What the user will guess
 const words = {
   programming: ['python', 'javascript', 'php', 'html', 'css'],
   animals: ['dog', 'cat', 'elephant', 'tiger', 'lion'],
@@ -32,14 +32,15 @@ let wrongAttempts,
   guessSpans;
 let highScore = 0;
 
+// Functions
+
 // Initialize the game
 function initializeGame() {
   resetGameVariables();
   randomCategory = getRandomCategory();
   randomWord = getRandomWord(randomCategory);
   wordArray = Array.from(randomWord);
-
-  elements.categorySpan.textContent = randomCategory;
+  categorySpan.textContent = randomCategory;
   renderLetters();
   renderWordSpaces();
   guessSpans = document.querySelectorAll('.letters-guess span');
@@ -66,14 +67,14 @@ function getRandomWord(category) {
 
 // Render letter buttons
 function renderLetters() {
-  elements.lettersContainer.innerHTML = lettersArray
+  lettersContainer.innerHTML = lettersArray
     .map(letter => `<span class="letter-box">${letter}</span>`)
     .join('');
 }
 
 // Render spaces for the letters in the word to be guessed
 function renderWordSpaces() {
-  elements.lettersGuessContainer.innerHTML = wordArray
+  lettersGuessContainer.innerHTML = wordArray
     .map(letter => `<span class="${letter === ' ' ? 'has-space' : ''}"></span>`)
     .join('');
 }
@@ -86,7 +87,7 @@ function handleLetterClick(target) {
 
   if (!guessedCorrectly) {
     wrongAttempts++;
-    elements.hangmanDraw.classList.add(`wrong-${wrongAttempts}`);
+    hangmanDraw.classList.add(`wrong-${wrongAttempts}`);
     if (wrongAttempts === maxWrongAttempts) endGame(false);
   } else if (correctGuesses === wordArray.length) {
     endGame(true);
@@ -113,33 +114,33 @@ function endGame(won) {
   const attemptsLeft = maxWrongAttempts - wrongAttempts;
   if (won && attemptsLeft > highScore) highScore = attemptsLeft;
 
-  elements.modal.classList.add('show');
-  elements.overlay.classList.add('show');
-  elements.popupMessage.innerHTML = won
+  modal.classList.add('show');
+  overlay.classList.add('show');
+  popupMessage.innerHTML = won
     ? `Congratulations, You Won!`
     : `Game Over! The word was ${randomWord}`;
-  elements.popupMessage.style.color = won ? '#009688' : '#e74c3c';
-  elements.statsElement.style.display = won ? 'flex' : 'none';
-  elements.lettersContainer.classList.add('finished');
+  popupMessage.style.color = won ? '#009688' : '#e74c3c';
+  statsElement.style.display = won ? 'flex' : 'none';
+  lettersContainer.classList.add('finished');
 }
 
 // Reset the game to start again
 function resetGame() {
-  elements.modal.classList.remove('show');
-  elements.overlay.classList.remove('show');
-  elements.hangmanDraw.className = 'hangman-draw';
-  elements.lettersContainer.classList.remove('finished');
+  modal.classList.remove('show');
+  overlay.classList.remove('show');
+  hangmanDraw.className = 'hangman-draw';
+  lettersContainer.classList.remove('finished');
   initializeGame();
 }
 
 // Update the statistics displayed in the modal
 function updateStats() {
-  elements.attemptsLeftSpan.textContent = maxWrongAttempts - wrongAttempts;
-  elements.highscoreSpan.textContent = highScore;
+  attemptsLeftSpan.textContent = maxWrongAttempts - wrongAttempts;
+  highscoreSpan.textContent = highScore;
 }
 
 // Event Listeners
-elements.playAgainButton.addEventListener('click', resetGame);
+playAgainButton.addEventListener('click', resetGame);
 
 document.addEventListener('click', e => {
   if (e.target.className.includes('letter-box')) {
